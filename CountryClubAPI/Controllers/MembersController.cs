@@ -50,5 +50,18 @@ namespace CountryClubAPI.Controllers
 
             return Redirect($"/api/members/{newMember.Id}");
         }
+
+        [HttpDelete]
+        [Route("/api/members/{id:int}")]
+        public string DeleteMember(int id)
+        {
+            if(id != null)
+            {
+                _context.Members.Remove(_context.Members.Find(id));
+                _context.SaveChanges();
+            }
+
+            return "Deleted.";
+        }
     }
 }
