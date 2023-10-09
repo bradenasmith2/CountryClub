@@ -75,7 +75,6 @@ namespace CountryClubAPI.Controllers
             {
                 return Redirect("/api/members/error");
             }
-            
         }
 
         [HttpDelete]
@@ -92,7 +91,6 @@ namespace CountryClubAPI.Controllers
             {
                 return "Error. Please try again";
             }
-            
         }
     }
 }
