@@ -13,12 +13,6 @@ namespace CountryClubAPI.Controllers
             _context = context;
         }
 
-        [Route("/api/bookings/error")]
-        public string BookingError()
-        {
-            return "Error. Please try again";
-        }
-
         [HttpPost]
         [Route("/api/booking")]
         public IActionResult NewBooking(Booking booking)
@@ -31,7 +25,7 @@ namespace CountryClubAPI.Controllers
             }
             else
             {
-                return Redirect("/api/bookings/error");
+                return new JsonResult("Error.");
             }
         }
 
@@ -46,7 +40,7 @@ namespace CountryClubAPI.Controllers
             }
             else
             {
-                return Redirect("/api/bookings/error");
+                return new JsonResult("Error.");
             }
         }
     }
