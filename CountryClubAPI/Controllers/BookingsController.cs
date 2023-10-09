@@ -1,6 +1,7 @@
 ﻿using CountryClubAPI.DataAccess;
 using CountryClubAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
 
 namespace CountryClubAPI.Controllers
 {
@@ -42,6 +43,26 @@ namespace CountryClubAPI.Controllers
             {
                 return new JsonResult("Error.");
             }
+        }
+
+        [Route("/api/bookings/daily")]
+        public IActionResult DailyBookings()
+        {
+            var dailyBookings = _context.Bookings.Where(e => e.StartTime.Day == DateTime.Now.Day).ToList();
+
+            return new JsonResult(dailyBookings);
+        }
+
+        [Route("/api/bookings/weekly")]
+        public IActionResult WeeklyBookings()
+        {
+            var weeklyBookings = new List<Booking>();
+            for(int i = 0; i >= 7; i++)
+            {
+                weeklyBookings.Add(weeklyBookings[DateTime.Now.Day + i]);
+            }
+
+            return new JsonResult(weeklyBookings);
         }
     }
 }
