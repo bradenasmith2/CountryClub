@@ -16,6 +16,12 @@ namespace CountryClubAPI.Controllers
             _context = context;
         }
 
+        [Route("/api/members/error")]
+        public string MemberError()
+        {
+            return "Error. Please try again";
+        }
+
         public IActionResult AllMembers()
         {
             var members = _context.Members;
@@ -26,29 +32,50 @@ namespace CountryClubAPI.Controllers
         [Route("/api/members/{id:int}")]
         public IActionResult SingleMember(int id)
         {
-            var member = _context.Members.Find(id);
+            if(id != null)
+            {
+                var member = _context.Members.Find(id);
 
-            return new JsonResult(member);
+                return new JsonResult(member);
+            }
+            else
+            {
+                return Redirect("/api/members/error");
+            }
         }
 
         [HttpPost]
         public IActionResult NewMember(Member member)
         {
-            _context.Members.Add(member);
-            _context.SaveChanges();
+            if(member != null)
+            {
+                _context.Members.Add(member);
+                _context.SaveChanges();
 
-            return Redirect($"/api/members/{member.Id}");
+                return Redirect($"/api/members/{member.Id}");
+            }
+            else
+            {
+                return Redirect("/api/members/error");
+            }
         }
 
         [HttpPut]
         [Route("/api/members/{id:int}")]
         public IActionResult UpdateMember(int id, Member newMember)
         {
-            newMember.Id = id;
-            _context.Members.Update(newMember);
-            _context.SaveChanges();
-
-            return Redirect($"/api/members/{newMember.Id}");
+            if (id != null && newMember != null)
+            {
+                newMember.Id = id;
+                _context.Members.Update(newMember);
+                _context.SaveChanges();
+                return Redirect($"/api/members/{newMember.Id}");
+            }
+            else
+            {
+                return Redirect("/api/members/error");
+            }
+            
         }
 
         [HttpDelete]
@@ -59,9 +86,13 @@ namespace CountryClubAPI.Controllers
             {
                 _context.Members.Remove(_context.Members.Find(id));
                 _context.SaveChanges();
+                return "Deleted.";
             }
-
-            return "Deleted.";
+            else
+            {
+                return "Error. Please try again";
+            }
+            
         }
     }
 }
