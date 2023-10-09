@@ -21,5 +21,13 @@ namespace CountryClubAPI.Controllers
 
             return new JsonResult(members);
         }
+
+        [Route("/api/members/{id:int}")]
+        public IActionResult SingleMember(int id)
+        {
+            var member = _context.Members.Find(id);
+
+            return new JsonResult(member);
+        }
     }
 }
