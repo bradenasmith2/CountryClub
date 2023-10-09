@@ -39,5 +39,16 @@ namespace CountryClubAPI.Controllers
 
             return Redirect($"/api/members/{member.Id}");
         }
+
+        [HttpPut]
+        [Route("/api/members/{id:int}")]
+        public IActionResult UpdateMember(int id, Member newMember)
+        {
+            newMember.Id = id;
+            _context.Members.Update(newMember);
+            _context.SaveChanges();
+
+            return Redirect($"/api/members/{newMember.Id}");
+        }
     }
 }
