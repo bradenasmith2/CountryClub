@@ -92,19 +92,5 @@ namespace CountryClubAPI.Controllers
                 return "Error. Please try again";
             }
         }
-
-        [Route("/api/members/{memberId:int}bookings")]
-        public IActionResult MemberBookings(int memberId)
-        {
-            var member = _context.Members.Find(memberId);
-            var bookings = new List<Booking>();
-
-            foreach (var e in _context.Bookings.Where(e => e.MemberId == memberId).Where(e => e.StartTime.Date.ToString() == "9/24/12"))
-            {
-                bookings.Add(e);
-            }
-
-            return new JsonResult(bookings);
-        }
     }
 }
