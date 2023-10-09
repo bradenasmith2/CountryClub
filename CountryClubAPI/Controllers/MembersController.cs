@@ -1,6 +1,7 @@
 ﻿using CountryClubAPI.DataAccess;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using CountryClubAPI.Models;
 
 namespace CountryClubAPI.Controllers
 {
@@ -15,11 +16,83 @@ namespace CountryClubAPI.Controllers
             _context = context;
         }
 
+        [Route("/api/members/error")]
+        public string MemberError()
+        {
+            return "Error. Please try again";
+        }
+
         public IActionResult AllMembers()
         {
             var members = _context.Members;
 
             return new JsonResult(members);
+        }
+
+        [Route("/api/members/{id:int}")]
+        public IActionResult SingleMember(int id)
+        {
+            if(id != null)
+            {
+                var member = _context.Members.Find(id);
+
+                return new JsonResult(member);
+            }
+            else
+            {
+                return Redirect("/api/members/error");
+            }
+        }
+
+        [HttpPost]
+        public IActionResult NewMember(Member member)
+        {
+            if(member != null)
+            {
+                _context.Members.Add(member);
+                _context.SaveChanges();
+
+                return Redirect($"/api/members/{member.Id}");
+            }
+            else
+            {
+                return Redirect("/api/members/error");
+            }
+        }
+
+        [HttpPut]
+        [Route("/api/members/{id:int}")]
+        public IActionResult UpdateMember(int id, Member newMember)
+        {
+            if (id != null && newMember != null)
+            {
+                newMember.Id = id;
+                _context.Members.Update(newMember);
+                _context.SaveChanges();
+                return Redirect($"/api/members/{newMember.Id}");
+            }
+            else
+            {
+                return Redirect("/api/members/error");
+            }
+            
+        }
+
+        [HttpDelete]
+        [Route("/api/members/{id:int}")]
+        public string DeleteMember(int id)
+        {
+            if(id != null)
+            {
+                _context.Members.Remove(_context.Members.Find(id));
+                _context.SaveChanges();
+                return "Deleted.";
+            }
+            else
+            {
+                return "Error. Please try again";
+            }
+            
         }
     }
 }
